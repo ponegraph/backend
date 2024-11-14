@@ -27,6 +27,7 @@ func main() {
 
 	router.GET("/songs/id/:songId", songController.GetSongDetail)
 	router.GET("/songs/top-rank", songController.GetTopRank)
+	router.GET("/songs/search", songController.Search)
 
 	router.GET("/artists/id/:artistId", artistController.GetArtistDetail)
 	router.GET("/artists/search", artistController.Search)

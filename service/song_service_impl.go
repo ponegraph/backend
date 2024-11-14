@@ -202,3 +202,23 @@ func (service *SongServiceImpl) getTopKSimilarSong(songId int, k int) []int {
 
 	return topKSongIdList
 }
+
+func (service *SongServiceImpl) SearchSongByName(name string) web.SongListResponse {
+	songUnitList, err := service.SongRepository.GetAllUnitByName(name)
+	helper.PanicIfError(err)
+
+	var songList []songModel.SongListItem
+	for _, songUnit := range songUnitList {
+		artist, err := service.ArtistRepository.GetAllUnitBySongId(songUnit.SongId)
+		helper.PanicIfError(err)
+
+		songListItem := songModel.NewSongListItem(songUnit, artist)
+		songList = append(songList, *songListItem)
+	}
+
+	response := web.SongListResponse{
+		Songs: songList,
+	}
+
+	return response
+}

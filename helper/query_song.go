@@ -83,6 +83,28 @@ func GetSongUnitByIdQuery(songId int) string {
 	return query
 }
 
+func GetAllSongUnitByNameQuery(songName string) string {
+	query := fmt.Sprintf(`
+		PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+		PREFIX owl: <http://www.w3.org/2002/07/owl#>
+		PREFIX v: <http://example.com/vocab#>
+		
+		SELECT DISTINCT ?songName ?songId ?releaseDate
+		WHERE {
+			?song v:hasSongId ?songId ;
+			rdf:type owl:Song ;
+			rdfs:label ?songName ;
+			v:hasReleaseDate ?releaseDate ;
+			v:hasNormalizedName ?songSearchName
+			
+			FILTER(REGEX(?songSearchName, "%s", "i"))
+		}
+	`, songName)
+
+	return query
+}
+
 func GetAllSongUnitFromArtistIdQuery(artistId string) string {
 	query := fmt.Sprintf(`
 		PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>

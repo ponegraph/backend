@@ -105,3 +105,19 @@ func (repository *SongRepositoryImpl) GetAllUnitByArtistId(artistId string) ([]s
 
 	return songList, nil
 }
+
+func (repository *SongRepositoryImpl) GetAllUnitByName(name string) ([]songModel.SongUnit, error) {
+	query := helper.GetAllSongUnitByNameQuery(name)
+
+	responseBody, err := helper.ExecuteGraphDBQuery(query)
+	if err != nil {
+		return nil, err
+	}
+
+	songList, err := songModel.ConvertToSongUnitList(responseBody)
+	if err != nil {
+		return nil, err
+	}
+
+	return songList, nil
+}

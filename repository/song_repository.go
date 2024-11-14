@@ -11,4 +11,5 @@ type SongRepository interface {
 	GetAllSongFeature() ([]songModel.SongFeature, error)
 	GetAllSongIdFromSameArtist(songId int) ([]int, error)
 	GetAllUnitByArtistId(artistId string) ([]songModel.SongUnit, error)
+	GetAllUnitByName(name string) ([]songModel.SongUnit, error)
 }
