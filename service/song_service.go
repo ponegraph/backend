@@ -8,4 +8,5 @@ type SongService interface {
 	GetSongDetail(songId int) web.SongDetailResponse
 	GetTopRank() web.SongListResponse
 	GetSongByArtistId(artistId string) web.SongArtistResponse
+	SearchSongByName(tag string) web.SongListResponse
 }

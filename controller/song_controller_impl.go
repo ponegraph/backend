@@ -6,6 +6,7 @@ import (
 	"github.com/ponegraph/backend/model/web"
 	"github.com/ponegraph/backend/service"
 	"net/http"
+	"net/url"
 	"strconv"
 )
 
@@ -43,5 +44,19 @@ func (controller *SongControllerImpl) GetTopRank(writer http.ResponseWriter, req
 		Data:   topRankSongResponse,
 	}
 
+	helper.WriteToResponseBody(writer, webResponse)
+}
+
+func (controller *SongControllerImpl) Search(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	name := request.URL.Query().Get("name")
+	name, _ = url.QueryUnescape(name)
+
+	songListResponse := controller.SongService.SearchSongByName(name)
+
+	webResponse := web.WebResponse{
+		Code:   200,
+		Status: "OK",
+		Data:   songListResponse,
+	}
 	helper.WriteToResponseBody(writer, webResponse)
 }
