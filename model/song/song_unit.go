@@ -3,9 +3,11 @@ package song
 import (
 	"encoding/json"
 	"errors"
+	"log/slog"
+	"strconv"
+
 	"github.com/ponegraph/backend/exception"
 	"github.com/ponegraph/backend/helper"
-	"strconv"
 )
 
 type SongUnit struct {
@@ -34,6 +36,7 @@ func ConvertToSongUnit(responseBody []byte) (*SongUnit, error) {
 	var result SongUnitGraphDBResult
 	err := json.Unmarshal(responseBody, &result)
 	if err != nil {
+		slog.Error("Failed to execute request", "error", err.Error())
 		return nil, errors.New(helper.ErrFailedDatabaseQuery)
 	}
 
@@ -55,6 +58,7 @@ func ConvertToSongUnitList(responseBody []byte) ([]SongUnit, error) {
 	var result SongUnitGraphDBResult
 	err := json.Unmarshal(responseBody, &result)
 	if err != nil {
+		slog.Error("Failed to execute request", "error", err.Error())
 		return nil, errors.New(helper.ErrFailedDatabaseQuery)
 	}
 
@@ -89,6 +93,7 @@ func ConvertToSongIdList(responseBody []byte) ([]int, error) {
 	var result SongIdGraphDBResult
 	err := json.Unmarshal(responseBody, &result)
 	if err != nil {
+		slog.Error("Failed to execute request", "error", err.Error())
 		return nil, errors.New(helper.ErrFailedDatabaseQuery)
 	}
 

@@ -1,22 +1,26 @@
 package controller
 
 import (
+	"log/slog"
+	"net/http"
+	"net/url"
+	"strconv"
+
 	"github.com/julienschmidt/httprouter"
 	"github.com/ponegraph/backend/helper"
 	"github.com/ponegraph/backend/model/web"
 	"github.com/ponegraph/backend/service"
-	"net/http"
-	"net/url"
-	"strconv"
 )
 
 type SongControllerImpl struct {
 	SongService service.SongService
+	logger      *slog.Logger
 }
 
-func NewSongController(songService service.SongService) SongController {
+func NewSongController(songService service.SongService, logger *slog.Logger) SongController {
 	return &SongControllerImpl{
 		SongService: songService,
+		logger:      logger,
 	}
 }
 

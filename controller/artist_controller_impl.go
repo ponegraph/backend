@@ -1,21 +1,25 @@
 package controller
 
 import (
+	"log/slog"
+	"net/http"
+	"net/url"
+
 	"github.com/julienschmidt/httprouter"
 	"github.com/ponegraph/backend/helper"
 	"github.com/ponegraph/backend/model/web"
 	"github.com/ponegraph/backend/service"
-	"net/http"
-	"net/url"
 )
 
 type ArtistControllerImpl struct {
 	ArtistService service.ArtistService
+	logger        *slog.Logger
 }
 
-func NewArtistController(artistService service.ArtistService) ArtistController {
+func NewArtistController(artistService service.ArtistService, logger *slog.Logger) ArtistController {
 	return &ArtistControllerImpl{
 		ArtistService: artistService,
+		logger:        logger,
 	}
 }
 

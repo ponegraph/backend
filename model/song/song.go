@@ -3,9 +3,11 @@ package song
 import (
 	"encoding/json"
 	"errors"
+	"log/slog"
+	"strconv"
+
 	"github.com/ponegraph/backend/exception"
 	"github.com/ponegraph/backend/helper"
-	"strconv"
 )
 
 type Song struct {
@@ -107,6 +109,7 @@ func ConvertToSong(responseBody []byte) (*Song, error) {
 	var result SongGraphDBResult
 	err := json.Unmarshal(responseBody, &result)
 	if err != nil {
+		slog.Error("Failed to execute request", "error", err.Error())
 		return nil, errors.New(helper.ErrFailedDatabaseQuery)
 	}
 

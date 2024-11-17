@@ -3,6 +3,8 @@ package artist
 import (
 	"encoding/json"
 	"errors"
+	"log/slog"
+
 	"github.com/ponegraph/backend/exception"
 	"github.com/ponegraph/backend/helper"
 )
@@ -65,6 +67,7 @@ func ConvertToArtistImage(responseBody []byte) (string, error) {
 	var result ArtistImageResult
 	err := json.Unmarshal(responseBody, &result)
 	if err != nil {
+		slog.Error("Failed to execute request", "error", err.Error())
 		return "", errors.New(helper.ErrFailedDatabaseQuery)
 	}
 

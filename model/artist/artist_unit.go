@@ -3,6 +3,7 @@ package artist
 import (
 	"encoding/json"
 	"errors"
+
 	"github.com/ponegraph/backend/exception"
 	"github.com/ponegraph/backend/helper"
 )
