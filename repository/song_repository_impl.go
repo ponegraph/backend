@@ -1,14 +1,20 @@
 package repository
 
 import (
+	"log/slog"
+
 	"github.com/ponegraph/backend/helper"
 	songModel "github.com/ponegraph/backend/model/song"
 )
 
-type SongRepositoryImpl struct{}
+type SongRepositoryImpl struct {
+	logger *slog.Logger
+}
 
-func NewSongRepository() SongRepository {
-	return &SongRepositoryImpl{}
+func NewSongRepository(logger *slog.Logger) SongRepository {
+	return &SongRepositoryImpl{
+		logger: logger,
+	}
 }
 
 func (repository *SongRepositoryImpl) GetById(songId int) (*songModel.Song, error) {

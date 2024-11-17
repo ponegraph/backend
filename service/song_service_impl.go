@@ -2,16 +2,18 @@ package service
 
 import (
 	"errors"
+	"log/slog"
+	"math"
+	"slices"
+	"sort"
+	"strconv"
+
 	"github.com/go-gota/gota/dataframe"
 	"github.com/go-gota/gota/series"
 	"github.com/ponegraph/backend/helper"
 	songModel "github.com/ponegraph/backend/model/song"
 	"github.com/ponegraph/backend/model/web"
 	"github.com/ponegraph/backend/repository"
-	"math"
-	"slices"
-	"sort"
-	"strconv"
 )
 
 type SongServiceImpl struct {
@@ -19,13 +21,17 @@ type SongServiceImpl struct {
 	ArtistRepository   repository.ArtistRepository
 	SongSimilarityData dataframe.DataFrame
 	SongRecommendation map[int][]int
+	logger             *slog.Logger
 }
 
-func NewSongService(songRepository repository.SongRepository, artistRepository repository.ArtistRepository) SongService {
+func NewSongService(
+	songRepository repository.SongRepository, artistRepository repository.ArtistRepository, logger *slog.Logger,
+) SongService {
 	newSongService := &SongServiceImpl{
 		SongRepository:     songRepository,
 		ArtistRepository:   artistRepository,
 		SongRecommendation: make(map[int][]int),
+		logger:             logger,
 	}
 
 	newSongService.InitSongSimilarityData()

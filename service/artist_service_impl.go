@@ -1,6 +1,8 @@
 package service
 
 import (
+	"log/slog"
+
 	"github.com/ponegraph/backend/helper"
 	"github.com/ponegraph/backend/model/web"
 	"github.com/ponegraph/backend/repository"
@@ -9,12 +11,16 @@ import (
 type ArtistServiceImpl struct {
 	ArtistRepository repository.ArtistRepository
 	SongRepository   repository.SongRepository
+	logger           *slog.Logger
 }
 
-func NewArtistService(songRepository repository.SongRepository, artistRepository repository.ArtistRepository) ArtistService {
+func NewArtistService(
+	songRepository repository.SongRepository, artistRepository repository.ArtistRepository, logger *slog.Logger,
+) ArtistService {
 	return &ArtistServiceImpl{
 		SongRepository:   songRepository,
 		ArtistRepository: artistRepository,
+		logger:           logger,
 	}
 }
 
