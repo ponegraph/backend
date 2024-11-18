@@ -40,12 +40,12 @@ jobs:
         with:
           images: ghcr.io/${{ env.IMAGE_NAME }}
 
-      - name: Build push ${{ env.REGISTRY_GH }} and ${{ env.REGISTRY }}
+      - name: Build push to ghcr.io
         id: build
         uses: docker/build-push-action@v5
         with:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
-            ghcr.io/${{ env.IMAGE_NAME_GH }}:latest
+            ghcr.io/${{ env.IMAGE_NAME }}:latest
           labels: ${{ steps.meta.outputs.labels }}
