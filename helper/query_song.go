@@ -119,10 +119,12 @@ func GetAllSongUnitFromArtistIdQuery(artistId string) string {
 			rdf:type owl:Song ;
 			rdfs:label ?songName ;
 			v:hasReleaseDate ?releaseDate ;
+			v:hasTotalSpotifyStream ?spotifyStream ;
 			v:hasArtist ?artist .
 		
 			?artist v:hasMbid mbid:%s .
 		}
+		ORDER BY DESC(?spotifyStream)
 	`, artistId)
 
 	return query
