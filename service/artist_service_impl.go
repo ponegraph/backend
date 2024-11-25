@@ -1,6 +1,7 @@
 package service
 
 import (
+	artistModel "github.com/ponegraph/backend/model/artist"
 	"log/slog"
 
 	"github.com/ponegraph/backend/helper"
@@ -33,7 +34,11 @@ func (service *ArtistServiceImpl) GetArtistDetail(artistId string) web.ArtistDet
 
 	artistInfoFromDbpedia, _ := service.ArtistRepository.GetInfoFromDbpedia(artist.MbUrl)
 
-	artist.AdditioanlInfo = *artistInfoFromDbpedia
+	if artistInfoFromDbpedia == nil {
+		artist.AdditioanlInfo = artistModel.ArtistDbpedia{}
+	} else {
+		artist.AdditioanlInfo = *artistInfoFromDbpedia
+	}
 	response := web.ArtistDetailResponse{
 		Artist: *artist,
 		Songs:  artistSongs,
