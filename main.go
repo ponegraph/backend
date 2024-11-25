@@ -17,13 +17,28 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+func CORSMiddleware(router http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if r.Method == http.MethodOptions {
+			w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+			w.Header().Set("Access-Control-Allow-Methods", "GET")
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+		w.Header().Set("Access-Control-Allow-Methods", "GET")
+		router.ServeHTTP(w, r)
+	})
+}
+
 // LoggingMiddleware function that wraps the Router's ServeHTTP method
-func LoggingMiddleware(router *httprouter.Router) http.Handler {
+func LoggingMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 
 		// Serve the request
-		router.ServeHTTP(w, r)
+		next.ServeHTTP(w, r)
 
 		// Log request details after serving the request
 		duration := time.Since(start).Seconds() * 1000
@@ -80,7 +95,7 @@ func main() {
 
 	router.PanicHandler = controller.ErrorHandler
 
-	loggedRouter := LoggingMiddleware(router)
+	loggedRouter := CORSMiddleware(LoggingMiddleware(router))
 
 	server := http.Server{
 		Addr:    ":3000",
