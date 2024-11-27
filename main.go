@@ -91,6 +91,7 @@ func main() {
 	router.GET("/songs/search", songController.Search)
 
 	router.GET("/artists/id/:artistId", artistController.GetArtistDetail)
+	router.GET("/artists/top-rank", artistController.GetTopRank)
 	router.GET("/artists/search", artistController.Search)
 
 	router.PanicHandler = controller.ErrorHandler

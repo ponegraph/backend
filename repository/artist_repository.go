@@ -10,4 +10,5 @@ type ArtistRepository interface {
 	GetAllUnitBySongId(songId int) ([]artistModel.ArtistUnit, error)
 	GetAllUnitByTag(tag string) ([]artistModel.ArtistUnit, error)
 	GetAllUnitByName(name string) ([]artistModel.ArtistUnit, error)
+	GetTopRank() ([]artistModel.ArtistUnit, error)
 }

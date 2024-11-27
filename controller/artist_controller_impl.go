@@ -57,3 +57,15 @@ func (controller *ArtistControllerImpl) Search(writer http.ResponseWriter, reque
 	}
 	helper.WriteToResponseBody(writer, webResponse)
 }
+
+func (controller *ArtistControllerImpl) GetTopRank(writer http.ResponseWriter, request *http.Request, params httprouter.Params) {
+	artistListResponse := controller.ArtistService.GetTopRank()
+
+	webResponse := web.WebResponse{
+		Code:   200,
+		Status: "OK",
+		Data:   artistListResponse,
+	}
+
+	helper.WriteToResponseBody(writer, webResponse)
+}

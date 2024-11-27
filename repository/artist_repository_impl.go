@@ -96,3 +96,19 @@ func (repository *ArtistRepositoryImpl) GetInfoFromDbpedia(mbUrl string) (*artis
 
 	return artistDbpedia, nil
 }
+
+func (repository *ArtistRepositoryImpl) GetTopRank() ([]artistModel.ArtistUnit, error) {
+	query := helper.GetTopKArtistUnitQuery(10)
+
+	responseBody, err := helper.ExecuteGraphDBQuery(query)
+	if err != nil {
+		return nil, err
+	}
+
+	artistUnitList, err := artistModel.ConvertToArtistUnitList(responseBody)
+	if err != nil {
+		return nil, err
+	}
+
+	return artistUnitList, nil
+}

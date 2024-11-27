@@ -65,3 +65,13 @@ func (service *ArtistServiceImpl) SearchArtistByName(artistName string) web.Arti
 	}
 	return response
 }
+
+func (service *ArtistServiceImpl) GetTopRank() web.ArtistListResponse {
+	artistUnitList, err := service.ArtistRepository.GetTopRank()
+	helper.PanicIfError(err)
+
+	response := web.ArtistListResponse{
+		Artists: artistUnitList,
+	}
+	return response
+}
