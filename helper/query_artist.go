@@ -127,3 +127,26 @@ func GetArtistInfoFromDbpediaQuery(mbUrl string) string {
 	`, mbUrl)
 	return query
 }
+
+func GetTopKArtistUnitQuery(k int) string {
+	query := fmt.Sprintf(`
+		PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+		PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+		PREFIX owl: <http://www.w3.org/2002/07/owl#>
+		PREFIX v: <http://example.com/vocab#>
+		
+		PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+		SELECT DISTINCT ?artistName ?artistId ?mbUrl
+		WHERE {
+			?artist rdf:type owl:Artist ;
+			rdfs:label ?artistName ;
+			v:hasMbid ?mbUrl ;
+			v:hasTotalLastfmListeners ?totalLastfmListeners .
+					
+			?mbUrl rdfs:label ?artistId .
+		}
+		ORDER BY DESC(xsd:integer(?totalLastfmListeners))
+		LIMIT %d
+	`, k)
+	return query
+}

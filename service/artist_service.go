@@ -8,4 +8,5 @@ type ArtistService interface {
 	GetArtistDetail(artistId string) web.ArtistDetailResponse
 	SearchArtistByTag(tag string) web.ArtistListResponse
 	SearchArtistByName(tag string) web.ArtistListResponse
+	GetTopRank() web.ArtistListResponse
 }
