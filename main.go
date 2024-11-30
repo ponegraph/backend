@@ -17,10 +17,19 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+func getEnv(key, fallback string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return fallback
+}
+
 func CORSMiddleware(router http.Handler) http.Handler {
+	heroku := getEnv("HEROKU_URL", "https://ponegraph-d46623e17cfe.herokuapp.com")
+
 	allowedOrigins := []string{
 		"http://localhost:5173",
-		"https://ponegraph-47b9dc551128.herokuapp.com",
+		heroku,
 	}
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
