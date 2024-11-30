@@ -18,16 +18,32 @@ import (
 )
 
 func CORSMiddleware(router http.Handler) http.Handler {
+	allowedOrigins := []string{
+		"http://localhost:5173",
+		"https://ponegraph-47b9dc551128.herokuapp.com",
+	}
+
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		origin := r.Header.Get("Origin")
+		allowOrigin := ""
+
+		// Check if the origin is in the allowed list
+		for _, o := range allowedOrigins {
+			if origin == o {
+				allowOrigin = o
+				break
+			}
+		}
+
+		w.Header().Set("Access-Control-Allow-Origin", allowOrigin)
+		w.Header().Set("Access-Control-Allow-Methods", "GET, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
 		if r.Method == http.MethodOptions {
-			w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
-			w.Header().Set("Access-Control-Allow-Methods", "GET")
 			w.WriteHeader(http.StatusOK)
 			return
 		}
 
-		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
-		w.Header().Set("Access-Control-Allow-Methods", "GET")
 		router.ServeHTTP(w, r)
 	})
 }
