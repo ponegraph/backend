@@ -25,7 +25,7 @@ func getEnv(key, fallback string) string {
 }
 
 func CORSMiddleware(router http.Handler) http.Handler {
-	heroku := getEnv("HEROKU_URL", "https://ponegraph-d46623e17cfe.herokuapp.com")
+	heroku := getEnv("FRONTEND_URL", "https://ponegraph-101b130666cf.herokuapp.com")
 
 	allowedOrigins := []string{
 		"http://localhost:5173",
@@ -123,12 +123,18 @@ func main() {
 
 	loggedRouter := CORSMiddleware(LoggingMiddleware(router))
 
+	port := os.Getenv("PORT")
+	logger.Info("PORT: " + port)
+	if port == "" {
+		port = "3000" // Default port if not specified
+	}
+
 	server := http.Server{
-		Addr:    ":3000",
+		Addr:    ":" + port,
 		Handler: loggedRouter,
 	}
 
-	logger.Info("Server started at localhost:3000")
+	logger.Info("Server started at localhost:" + port)
 	err := server.ListenAndServe()
 	helper.PanicIfError(err)
 }
