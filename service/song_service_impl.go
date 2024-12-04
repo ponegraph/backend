@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"github.com/ponegraph/backend/exception"
 	"log/slog"
 	"math"
 	"slices"
@@ -77,7 +78,10 @@ func (service *SongServiceImpl) GetSongDetail(songId int) web.SongDetailResponse
 	helper.PanicIfError(err)
 
 	songArtist, err := service.ArtistRepository.GetAllUnitBySongId(songId)
-	helper.PanicIfError(err)
+	var notFoundErr *exception.NotFoundError
+	if err != nil && !errors.As(err, &notFoundErr) {
+		panic(err)
+	}
 
 	recommendedSongId := service.getTopSimilarSong(songId)
 
@@ -87,7 +91,11 @@ func (service *SongServiceImpl) GetSongDetail(songId int) web.SongDetailResponse
 		helper.PanicIfError(err)
 
 		recommendedSongArtist, err := service.ArtistRepository.GetAllUnitBySongId(songId)
-		helper.PanicIfError(err)
+
+		var notFoundErr *exception.NotFoundError
+		if err != nil && !errors.As(err, &notFoundErr) {
+			panic(err)
+		}
 
 		songListItem := songModel.NewSongListItem(*recommendedSongUnit, recommendedSongArtist)
 
@@ -156,7 +164,10 @@ func (service *SongServiceImpl) getTopKSimilarSong(songId int, k int) []int {
 	}
 
 	sameArtistSongIdList, err := service.SongRepository.GetAllSongIdFromSameArtist(songId)
-	helper.PanicIfError(err)
+	var notFoundErr *exception.NotFoundError
+	if err != nil && errors.Is(err, notFoundErr) {
+		panic(err)
+	}
 
 	similarityCol := service.SongSimilarityData.Col(strconv.Itoa(songId))
 
